@@ -1,20 +1,24 @@
 import { Request, Response } from 'express';
 import { addToWishlistService, updateBookReadingStatusService } from './wishlist.service';
 import { IBook } from '../book/book.interface';
+import catchAsync from '../../../utils/catchAsync';
+import { sendSuccessResponse } from '../../../utils/responseSender';
+import { StatusCodes } from 'http-status-codes';
+import { ApiError } from '../../../utils/ApiError';
 
-export async function addToWishlist(req: Request, res: Response) {
+export const addToWishlist = catchAsync(async (req: Request, res: Response) => {
     const { bookId, userId, status } = req.body;
 
-    try {
-        const wishlistItem = await addToWishlistService(userId, bookId, status);
-        res.status(201).json(wishlistItem);
-    } catch (error) {
-        console.error('Error adding to wishlist:', error);
-        res.status(500).json({ error: 'Server error' });
-    }
-}
+    const wishlistItem = await addToWishlistService(userId, bookId, status);
 
-export async function updateBookReadingStatus(req: Request, res: Response) {
+    if (!wishlistItem) {
+        throw new ApiError('Book not found', StatusCodes.NOT_FOUND);
+    }
+
+    sendSuccessResponse(res, wishlistItem, StatusCodes.CREATED);
+});
+
+export const updateBookReadingStatus = catchAsync(async (req: Request, res: Response) => {
     const { bookId } = req.params;
     const { isFinishedReading, isCurrentlyReading } = req.body;
     const updates: Partial<IBook> = {};
@@ -27,15 +31,10 @@ export async function updateBookReadingStatus(req: Request, res: Response) {
         updates.isCurrentlyReading = isCurrentlyReading;
     }
 
-    try {
-        const updatedBook = await updateBookReadingStatusService(bookId, updates);
-        if (!updatedBook) {
-            return res.status(404).json({ error: 'Book not found' });
-        }
-
-        res.json(updatedBook);
-    } catch (error) {
-        console.error('Error updating book status:', error);
-        res.status(500).json({ error: 'Server error' });
+    const updatedBook = await updateBookReadingStatusService(bookId, updates);
+    if (!updatedBook) {
+        throw new ApiError('Book not found', StatusCodes.NOT_FOUND);
     }
-}
+
+    sendSuccessResponse(res, updatedBook);
+});

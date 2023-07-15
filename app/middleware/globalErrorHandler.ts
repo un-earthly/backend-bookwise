@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { StatusCodes } from 'http-status-codes';
+import { ApiError } from '../../utils/ApiError';
 
 export function errorHandler(
     err: Error,
@@ -12,12 +13,9 @@ export function errorHandler(
     let statusCode = StatusCodes.INTERNAL_SERVER_ERROR;
     let message = 'Server Error';
 
-    if (err.name === 'ValidationError') {
-        statusCode = StatusCodes.BAD_REQUEST;
+    if (err instanceof ApiError) {
+        statusCode = err.status;
         message = err.message;
-    } else if (err.name === 'CastError') {
-        statusCode = StatusCodes.BAD_REQUEST;
-        message = 'Invalid ID';
     }
 
     res.status(statusCode).json({ error: message });
