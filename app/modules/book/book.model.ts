@@ -35,6 +35,14 @@ const bookSchema: Schema = new Schema(
             type: String,
             required: true
         },
+        isFinishedReading: {
+            type: Boolean,
+            default: false
+        },
+        isCurrentlyReading: {
+            type: Boolean,
+            default: false
+        },
     },
     { timestamps: true }
 );
