@@ -1,9 +1,9 @@
 import express from 'express';
-import { createBook, updateBookDetails } from './book.controller';
+import { createBook, getAllBooks, updateBookDetails } from './book.controller';
 
 const router = express.Router();
 
-
+router.get('/', getAllBooks);
 router.post('/', createBook);
 router.put('/:bookId', updateBookDetails);
 

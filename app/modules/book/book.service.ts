@@ -4,7 +4,9 @@ import { IBook } from "./book.interface";
 import Book from "./book.model";
 
 
-
+export async function getAllBooksService(): Promise<IBook[]> {
+    return await Book.find();
+}
 
 
 export async function createBookService(bookData: IBook): Promise<IBook> {

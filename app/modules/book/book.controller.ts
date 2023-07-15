@@ -1,8 +1,14 @@
 import { Request, Response } from 'express';
 import { IBook } from './book.interface';
-import { createBookService, updateBookDetailsService } from './book.service';
+import { createBookService, getAllBooksService, updateBookDetailsService } from './book.service';
 import catchAsync from '../../../utils/catchAsync';
 import { sendSuccessResponse } from '../../../utils/responseSender';
+
+
+export const getAllBooks = catchAsync(async (req: Request, res: Response) => {
+    const allBooks = await getAllBooksService();
+    sendSuccessResponse(res, allBooks);
+});
 
 
 export const createBook = catchAsync(async (req: Request, res: Response) => {
