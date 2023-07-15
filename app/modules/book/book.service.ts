@@ -3,7 +3,14 @@ import { ApiError } from "../../../utils/ApiError";
 import { IBook } from "./book.interface";
 import Book from "./book.model";
 
-export async function filterAndSearchBooksService(genre?: string, year?: number, query?: string): Promise<IBook[]> {
+
+export async function filterAndSearchBooksService(
+    genre?: string,
+    year?: number,
+    query?: string,
+    pageNumber: number = 1,
+    pageSize: number = 10
+): Promise<IBook[]> {
     let filter: any = {};
 
     if (genre) {
@@ -23,11 +30,8 @@ export async function filterAndSearchBooksService(genre?: string, year?: number,
         ];
     }
 
-    return await Book.find(filter);
+    return await Book.find(filter).skip((pageNumber - 1) * pageSize).limit(pageSize);
 }
-
-
-
 
 
 

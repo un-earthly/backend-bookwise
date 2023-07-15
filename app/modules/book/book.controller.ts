@@ -6,8 +6,10 @@ import { sendSuccessResponse } from '../../../utils/responseSender';
 
 
 export const getAllBooks = catchAsync(async (req: Request, res: Response) => {
-    const { genre, year, q } = req.query;
-    const books = await filterAndSearchBooksService(String(genre), Number(year), String(q));
+    const { genre, year, q, limit, page } = req.query;
+    const pageNumber = parseInt(page as string) || 1;
+    const pageSize = parseInt(limit as string) || 10;
+    const books = await filterAndSearchBooksService(String(genre), Number(year), String(q), pageNumber, pageSize);
     sendSuccessResponse(res, books);
 });
 
