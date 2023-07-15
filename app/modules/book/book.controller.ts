@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { IBook } from './book.interface';
-import { createBookService, getAllBooksService, updateBookDetailsService } from './book.service';
+import { createBookService, deleteBookService, getAllBooksService, updateBookDetailsService } from './book.service';
 import catchAsync from '../../../utils/catchAsync';
 import { sendSuccessResponse } from '../../../utils/responseSender';
 
@@ -25,4 +25,17 @@ export const updateBookDetails = catchAsync(async (req: Request, res: Response) 
     const updatedBook = await updateBookDetailsService(bookId, updates);
 
     sendSuccessResponse(res, updatedBook);
+});
+
+
+
+export const deleteBook = catchAsync(async (req: Request, res: Response) => {
+    const { bookId } = req.params;
+
+    const deletedBook = await deleteBookService(bookId);
+    if (!deletedBook) {
+        return res.status(404).json({ error: 'Book not found' });
+    }
+
+    sendSuccessResponse(res, { message: 'Book deleted successfully' });
 });

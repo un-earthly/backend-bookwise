@@ -25,3 +25,8 @@ export async function updateBookDetailsService(bookId: string, updates: Partial<
     Object.assign(book, updates);
     return await book.save();
 }
+
+
+export async function deleteBookService(bookId: string): Promise<IBook | null> {
+    return await Book.findByIdAndDelete(bookId);
+}
