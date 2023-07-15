@@ -1,13 +1,14 @@
 import { Request, Response } from 'express';
 import { IBook } from './book.interface';
-import { createBookService, deleteBookService, filterBooksService, getAllBooksService, updateBookDetailsService } from './book.service';
+import { createBookService, deleteBookService, filterAndSearchBooksService, updateBookDetailsService } from './book.service';
 import catchAsync from '../../../utils/catchAsync';
 import { sendSuccessResponse } from '../../../utils/responseSender';
 
 
 export const getAllBooks = catchAsync(async (req: Request, res: Response) => {
-    const allBooks = await getAllBooksService();
-    sendSuccessResponse(res, allBooks);
+    const { genre, year, q } = req.query;
+    const books = await filterAndSearchBooksService(String(genre), Number(year), String(q));
+    sendSuccessResponse(res, books);
 });
 
 
@@ -40,9 +41,3 @@ export const deleteBook = catchAsync(async (req: Request, res: Response) => {
     sendSuccessResponse(res, { message: 'Book deleted successfully' });
 });
 
-
-export const filterBooks = catchAsync(async (req: Request, res: Response) => {
-    const { genre, year } = req.query;
-    const filteredBooks = await filterBooksService(String(genre), Number(year));
-    sendSuccessResponse(res, filteredBooks);
-});
