@@ -30,3 +30,18 @@ export async function updateBookDetailsService(bookId: string, updates: Partial<
 export async function deleteBookService(bookId: string): Promise<IBook | null> {
     return await Book.findByIdAndDelete(bookId);
 }
+
+
+export async function filterBooksService(genre?: string, year?: number): Promise<IBook[]> {
+    let filter: any = {};
+
+    if (genre) {
+        filter.genre = genre;
+    }
+
+    if (year) {
+        filter.publicationDate = { $gte: new Date(`${year}-01-01`), $lte: new Date(`${year}-12-31`) };
+    }
+
+    return await Book.find(filter);
+}
