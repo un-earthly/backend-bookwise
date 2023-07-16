@@ -5,7 +5,7 @@ import User from './user.model';
 import { IUser } from './user.inteface';
 
 export async function registerUserService(userData: IUser): Promise<IUser> {
-    const { email, password } = userData;
+    const { email, password, contact, username } = userData;
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -13,11 +13,13 @@ export async function registerUserService(userData: IUser): Promise<IUser> {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ email, password: hashedPassword });
+    const newUser = new User({ email, password: hashedPassword, username, contact });
     return await newUser.save();
 }
 
 export async function loginUserService(email: string, password: string): Promise<IUser | null> {
+    console.log(email);
+
     const user = await User.findOne({ email });
     if (!user) {
         throw new ApiError('Invalid email or password', StatusCodes.UNAUTHORIZED);
