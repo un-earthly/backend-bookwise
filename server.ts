@@ -11,7 +11,7 @@ app.use(cors())
 app.use(express.json())
 
 mongoose
-    .connect('mongodb://localhost/book_catalog',)
+    .connect('mongodb://127.0.0.1:27017/book_catalog',)
     .then(() => {
         console.log('Connected to MongoDB');
     })
@@ -19,9 +19,9 @@ mongoose
         console.error('Failed to connect to MongoDB', error);
     });
 
+app.use("/api/v1", router)
 
 app.use(errorHandler);
-app.use("api/v1", router)
 
 
 app.listen(config.port, () => {
