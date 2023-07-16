@@ -11,7 +11,7 @@ export async function filterAndSearchBooksService(
     pageNumber: number = 1,
     pageSize: number = 10
 ): Promise<IBook[]> {
-    let filter: any = {};
+    const filter: any = {};
 
     if (genre) {
         filter.genre = genre;
@@ -30,8 +30,14 @@ export async function filterAndSearchBooksService(
         ];
     }
 
-    return await Book.find(filter).skip((pageNumber - 1) * pageSize).limit(pageSize);
+    const books = await Book.find(filter)
+        .skip((pageNumber - 1) * pageSize)
+        .limit(pageSize)
+        .exec();
+
+    return books;
 }
+
 
 
 
