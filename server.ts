@@ -11,7 +11,7 @@ app.use(cors())
 app.use(express.json())
 
 mongoose
-    .connect('mongodb://127.0.0.1:27017/book_catalog',)
+    .connect(`mongodb+srv://${process.env.MONGO_ADMIN}:${process.env.MONGO_PASS}@cluster0.vcjhy.mongodb.net/book_catalog?retryWrites=true&w=majority`)
     .then(() => {
         console.log('Connected to MongoDB');
     })
