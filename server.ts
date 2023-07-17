@@ -23,6 +23,10 @@ app.use("/api/v1", router)
 
 app.use(errorHandler);
 
+app.get("/", (req, res) => {
+    res.send("welcome")
+})
+
 
 app.listen(config.port, () => {
     console.log("app listening on port " + config.port)

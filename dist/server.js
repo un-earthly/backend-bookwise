@@ -23,6 +23,9 @@ mongoose_1.default
 });
 app.use("/api/v1", routes_1.default);
 app.use(globalErrorHandler_1.errorHandler);
+app.get("/", (req, res) => {
+    res.send("welcome");
+});
 app.listen(config_1.config.port, () => {
     console.log("app listening on port " + config_1.config.port);
 });
